@@ -92,6 +92,12 @@ if ($data === false) {
  */
 $mail = new PHPMailer(true);
 
+$subject = !empty($subject) ? '200 CEOs Business Forum' : $subject;
+$message = $body;
+
+require_once 'template.php';
+
+print_r($message);
 try {
 
     // SMTP CONFIG
@@ -108,13 +114,8 @@ try {
         $_ENV['MAIL_FROM_EMAIL'],
         $_ENV['MAIL_FROM_NAME']
     );
-
-    $message = $body;
-    $subject = !empty($subject) ? '200 CEOs Business Forum' : $subject;
     // TO
     $mail->addAddress($to);
-    require_once 'template.php';
-
     // CONTENT
     $mail->isHTML();
     $mail->Subject = $subject;

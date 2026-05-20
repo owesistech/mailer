@@ -93,3 +93,5 @@ $message = `
     </div>
 </body>
 </html>`;
+
+?>
