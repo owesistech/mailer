@@ -59,10 +59,6 @@ $input = json_decode(file_get_contents("php://input"), true) ?? [];
  */
 $data = !isset($input['data']) ? $input : base64_decode($input['data'], true);
 
-print_r($input['data']);
-print_r(base64_decode($input['data']));
-
-return;
 $name = isset($input['data']) ? $data->name : $data['name'];
 $to = isset($input['data']) ? $data->to : $data['to'];
 $subject = isset($input['data']) ? $data->subject : $data['subject'];
