@@ -24,7 +24,7 @@ $message = '
             border: 1px solid #e0e0e0;
         }
         .header {
-            background-color: #000000;
+            background-color: rgb(201, 168, 76);
             color: #ffffff;
             padding: 40px;
             text-align: center;

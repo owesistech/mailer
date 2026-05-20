@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 /**
- * 1. LOAD COMPOSER FIRST
+ * LOAD COMPOSER FIRST
  */
 require __DIR__ . '/vendor/autoload.php';
 
@@ -19,12 +19,12 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 /**
- * 2. LOAD ENV
+ * LOAD ENV
  */
 require __DIR__ . '/bootstrap.php';
 
 /**
- * 3. CHECK ROUTE
+ * CHECK ROUTE
  */
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
@@ -38,7 +38,7 @@ if ($requestUri !== 'send') {
 }
 
 /**
- * 4. ONLY POST
+ * ONLY POST
  */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
@@ -49,30 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 /**
- * 5. READ INPUT
+ * READ INPUT
  */
 $input = json_decode(file_get_contents("php://input"), true) ?? [];
 
-/**
- * 6. VALIDATION
- */
-$requiredFields = ['name', 'to', 'subject', 'body'];
-
-$missingFields = array_filter($requiredFields, fn($f) => empty($input[$f]));
-
-if (!empty($missingFields)) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Missing required fields",
-        "missing" => array_values($missingFields)
-    ]);
-    exit;
-}
 
 /**
- * 7. DECODE BASE64 BODY
+ *  DECODE BASE64 BODY
  */
-$data = is_array($input) ? $input : base64_decode($input['data'], true);
+$data = !isset($input['data']) ? $input : base64_decode($input['data'], true);
 
 $name = isset($input['data']) ? $data->name : $data['name'];
 $to = isset($input['data']) ? $data->to : $data['to'];
@@ -88,14 +73,32 @@ if ($data === false) {
 }
 
 /**
- * 8. INIT MAILER (ONLY ONCE)
+ * VALIDATION
+ */
+$requiredFields = ['name', 'to', 'subject', 'body'];
+
+$missingFields = array_filter($requiredFields, fn($f) => empty($data[$f]));
+
+if (!empty($missingFields)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Missing required fields",
+        "missing" => array_values($missingFields),
+        "data" => json_encode($data)
+    ]);
+    exit;
+}
+
+
+/**
+ * INIT MAILER (ONLY ONCE)
  */
 $mail = new PHPMailer(true);
 
 $subject = !empty($subject) ? '200 CEOs Business Forum' : $subject;
-$message = $body;
-
+$message ='';
 require_once 'template.php';
+$message = empty($body) || strlen($body) < 100 ? $message : $body;
 
 try {
 
