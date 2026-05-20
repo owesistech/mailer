@@ -1,7 +1,7 @@
 <?php
 $date = date("Y");
 
-$message = `
+$message = '
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@ $message = `
     <title>Expression of Interest Confirmation</title>
     <style>
         body {
-            font-family: 'Georgia', serif;
+            font-family: \'Georgia\', serif;
             line-height: 1.6;
             color: #1a1a1a;
             background-color: #f4f4f4;
@@ -63,10 +63,10 @@ $message = `
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>$subject</h1>
+            <h1>'.$subject.'</h1>
         </div>
         <div class="content">
-            <p>Dear $name,</p>
+            <p>Dear <b>'.$name.'</b>,</p>
 
             <p>Thank you for declaring your interest in the 4th edition of the <strong>200 CEOs Business Forum</strong>.</p>
 
@@ -80,7 +80,7 @@ $message = `
                 </ul>
             </div>
 
-            <p>We appreciate your interest in this year's deliberation.</p>
+            <p>We appreciate your interest in this year\'s deliberation.</p>
 
             <p>Respectfully,<br>
             <strong>The Secretariat</strong><br>
@@ -88,10 +88,10 @@ $message = `
         </div>
         <div class="footer">
             <p class="tagline">At the intersection of capital, policy, and vision.</p>
-            <p>&copy; $date 200 CEOs Business Forum | Dar es Salaam, Tanzania</p>
+            <p>&copy; '.$date.' 200 CEOs Business Forum | Dar es Salaam, Tanzania</p>
         </div>
     </div>
 </body>
-</html>`;
+</html>';
 
 ?>

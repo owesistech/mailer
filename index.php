@@ -97,7 +97,6 @@ $message = $body;
 
 require_once 'template.php';
 
-print_r($message);
 try {
 
     // SMTP CONFIG
