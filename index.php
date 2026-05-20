@@ -57,12 +57,12 @@ $input = json_decode(file_get_contents("php://input"), true) ?? [];
 /**
  *  DECODE BASE64 BODY
  */
-$data = !isset($input['data']) ? $input : base64_decode($input['data'], true);
+$data = !isset($input['data']) ? $input : json_decode(base64_decode($input['data']), true);
 
-$name = isset($input['data']) ? $data->name : $data['name'];
-$to = isset($input['data']) ? $data->to : $data['to'];
-$subject = isset($input['data']) ? $data->subject : $data['subject'];
-$body = isset($input['data']) ? $data->body : $data['body'];
+$name = isset($data->name) ? $data->name : $data['name'];
+$to = isset($data->to) ? $data->to : $data['to'];
+$subject = isset($data->subject) ? $data->subject : $data['subject'];
+$body = isset($data->body) ? $data->body : $data['body'];
 
 if ($data === false) {
     echo json_encode([
@@ -77,14 +77,11 @@ if ($data === false) {
  */
 $requiredFields = ['name', 'to', 'subject', 'body'];
 
-$missingFields = array_filter($requiredFields, fn($f) => empty($data[$f]));
-
-if (!empty($missingFields)) {
+if (empty($to) && empty($message) && empty($subject) && empty($body)) {
     echo json_encode([
         "success" => false,
         "message" => "Missing required fields",
-        "missing" => array_values($missingFields),
-        "data" => json_encode($data)
+        "missing" => array_values($requiredFields)
     ]);
     exit;
 }
